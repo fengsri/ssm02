@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fengsri.restaurant.dao.MenuDao" >
+
+    <!-- 查询全部商品 public List<MenuShow> findAllMenu();-->
+    <select id="findAllMenu" resultType="com.fengsri.restaurant.vo.MenuShow">
+        select menu_id,menu_name,menu_price,menu_pic,menu_dis,menu_type_name
+        from menu,menu_type
+        where menu.menu_type_id=menu_type.menu_type_id
+    </select>
+
+
+    <!--  模糊查询 public List<MenuShow> searchMenu(@Param(value = "menu_like") String menu_like);
+-->
+    <select id="searchMenu" parameterType="String" resultType="com.fengsri.restaurant.vo.MenuShow">
+        select menu_id,menu_name,menu_price,menu_pic,menu_dis,menu_type_name
+        from menu,menu_type
+        where menu.menu_type_id=menu_type.menu_type_id
+        <if test="menu_like != null and menu_like != ''">
+            and menu_name LIKE '%${menu_like}%'
+        </if>
+    </select>
+
+    <!--分页查询
+    public List<MenuShow> findByPager(Pager pager);-->
+    <select id="findByPager" resultType="com.fengsri.restaurant.vo.MenuShow">
+        select menu_id,menu_name,menu_price,menu_pic,menu_dis,menu_type_name
+        from menu,menu_type
+        where menu.menu_type_id=menu_type.menu_type_id
+        limit #{start_count},#{end_count}
+    </select>
+
+    <!--查询商品的总数 public int getAllMenuCount();-->
+    <select id="getAllMenuCount" resultType="Integer">
+        select count(*) from menu
+    </select>
+
+
+    <!--  /*根据商品的menu_id查询商品的基本信息*/
+    public MenuShow findById(@Param(value = "menu_id")Integer menu_id);-->
+    <select id="findById" parameterType="Integer" resultType="com.fengsri.restaurant.vo.MenuShow">
+        select menu_id,menu_name,menu_price,menu_pic,menu_dis,menu_type_name
+        from menu,menu_type
+        where menu.menu_type_id=menu_type.menu_type_id
+        and menu_id=#{menu_id}
+    </select>
+
+</mapper>

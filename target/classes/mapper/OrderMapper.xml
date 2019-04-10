@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fengsri.restaurant.dao.OrderDao" >
+
+    <!-- /*根据order_id查询订单*/
+    public Order findById(int order_id);-->
+    <select id="findById" parameterType="Integer" resultType="Order">
+        select *
+        from  order1
+        where order_id = #{order_id}
+    </select>
+
+    <!--/*保存订单*/
+    public int saveOrder(Order order);-->
+    <insert id="saveOrder" parameterType="Order">
+        insert  into
+        order1 (order_id,order_date,user_id)
+        values (#{order_id},#{order_date},#{user_id})
+    </insert>
+
+    <!--/*保存订单明细*/
+    public int saveDetail(Detail detail);-->
+    <insert id="saveDetail" parameterType="Detail">
+        insert  into
+        detail (order_id,menu_id,detail_count)
+        values (#{order_id},#{menu_id},#{detail_count})
+    </insert>
+
+    <!--/*订单数量*/
+    public Integer allOrderCount();-->
+    <select id="allOrderCount" resultType="Integer">
+        select count(*) from order1
+    </select>
+
+    <!-- /*分页查询*/
+    public List<Order> findByPager(Pager pager);-->
+    <select id="findByPager" parameterType="com.fengsri.restaurant.vo.Pager" resultType="Order">
+        select *
+        from order1
+        limit #{start_count},#{end_count}
+    </select>
+
+</mapper>

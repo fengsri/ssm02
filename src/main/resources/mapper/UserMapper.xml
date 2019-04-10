@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fengsri.restaurant.dao.UserDao" >
+
+
+    <!--  /*用户名名模糊*/
+    public List<UserShow> searchUser(@Param(value = "user_like") String user_like);-->
+    <select id="searchUser" parameterType="String" resultType="com.fengsri.restaurant.vo.UserShow">
+        select user_id,user_name,user_password,user_phone,user_address,user_type_name
+        from user,user_type
+        where user.user_type_id=user_type.user_type_id
+        <if test="user_like != null and user_like != ''">
+            and user_name LIKE '%${user_like}%'
+        </if>
+    </select>
+
+    <!--/*用户分页查询*/
+    public List<UserShow> findByPager(Pager pager);-->
+    <select id="findByPager" parameterType="com.fengsri.restaurant.vo.Pager" resultType="com.fengsri.restaurant.vo.UserShow">
+        select user_id,user_name,user_password,user_phone,user_address,user_type_name
+        from user,user_type
+        where user.user_type_id=user_type.user_type_id
+        limit #{start_count},#{end_count}
+    </select>
+
+    <!-- /*查询用户的总的数量*/
+    public Integer getAllUserCount();-->
+    <select id="getAllUserCount" resultType="Integer">
+        select count(*) from user
+    </select>
+
+
+    <!--/*通过用户user_id查询用户信息*/
+    public UserShow findById(@Param(value = "user_id") Integer user_id);-->
+    <select id="findById" parameterType="Integer" resultType="com.fengsri.restaurant.vo.UserShow">
+        select user_id,user_name,user_password,user_phone,user_address,user_type_name
+        from user,user_type
+        where user.user_type_id=user_type.user_type_id
+        and user_id=#{user_id}
+    </select>
+
+    <!--public int modify(User user);-->
+    <update id="modify" parameterType="User">
+        update user
+        set user_name=#{user_name},user_password=#{user_password},user_phone=#{user_phone},user_address=#{user_address},user_type_id=#{user_type_id}
+        where user_id=#{user_id}
+    </update>
+
+
+    <!--/*删除用户user_id*/
+    public int delete(@Param(value = "user_id") String user_id);-->
+    <delete id="delete" parameterType="Integer">
+        delete from user where user_id=#{user_id}
+    </delete>
+
+
+    <!--/*添加用户*/
+    public int add(User user);-->
+    <insert id="add" parameterType="User">
+        insert into
+        user (user_name,user_password,user_phone,user_address,user_type_id)
+        values (#{user_name},#{user_password},#{user_phone},#{user_address},#{user_type_id})
+    </insert>
+</mapper>
